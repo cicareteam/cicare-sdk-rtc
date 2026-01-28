@@ -659,7 +659,7 @@ fun hangup() {
         }
     }
 
-    fun renegotiateRtC(sdpType: String) {
+    private fun renegotiateRtC(sdpType: String) {
         if (isClosed) return;
         socketManager.send("RECONNECT", JSONObject().apply {})
         CoroutineScope(Dispatchers.Main).launch {

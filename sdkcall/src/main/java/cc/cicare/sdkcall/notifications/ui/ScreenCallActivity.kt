@@ -459,13 +459,13 @@ class ScreenCallActivity :
         super.onStart()
         networkObserver.start()
         if (isForegroundMicPermissionGranted() && !bound) {
-            val intent = Intent(this, CiCareCallService::class.java).also {
+            val serviceIntent = Intent(this, CiCareCallService::class.java).also {
                 bindService(it, callServiceConnection, BIND_AUTO_CREATE)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
+                startForegroundService(serviceIntent)
             } else {
-                startService(intent)
+                startService(serviceIntent)
             }
         }
 
@@ -479,10 +479,10 @@ class ScreenCallActivity :
     override fun onResume() {
         super.onResume()
         if(!bound ) {
-            val intent = Intent(this, CiCareCallService::class.java).also {
+            val serviceIntent = Intent(this, CiCareCallService::class.java).also {
                 bindService(it, callServiceConnection, BIND_AUTO_CREATE)
             }
-            startService(intent)
+            startService(serviceIntent)
         }
     }
 
@@ -655,16 +655,16 @@ class ScreenCallActivity :
                 checkAndRequestPermissions { granted ->
                     if (granted) {
                         isOutgoingCall = false
-                        val intent = Intent(context, CiCareCallService::class.java).apply {
+                        val serviceIntent = Intent(context, CiCareCallService::class.java).apply {
                             action = CiCareCallService.ACTION.INCOMING
                             putExtras(myIntent)
                         }.also {
                             bindService(it, callServiceConnection, BIND_AUTO_CREATE)
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent)
+                            startForegroundService(serviceIntent)
                         } else {
-                            startService(intent)
+                            startService(serviceIntent)
                         }
                         callService?.let {
                             it.callState.value = "incoming"
@@ -678,16 +678,16 @@ class ScreenCallActivity :
 
                 checkAndRequestPermissions { granted ->
                     if (granted) {
-                        val intent = Intent(context, CiCareCallService::class.java).apply {
+                        val serviceIntent = Intent(context, CiCareCallService::class.java).apply {
                             action = CiCareCallService.ACTION.OUTGOING
                             putExtras(myIntent)
                         }.also {
                             bindService(it, callServiceConnection, BIND_AUTO_CREATE)
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent)
+                            startForegroundService(serviceIntent)
                         } else {
-                            startService(intent)
+                            startService(serviceIntent)
                         }
                         lifecycleScope.launch {
                             callService?.let {
