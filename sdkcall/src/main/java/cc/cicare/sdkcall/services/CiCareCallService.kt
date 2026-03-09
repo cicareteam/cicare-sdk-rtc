@@ -43,6 +43,8 @@ import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 import org.webrtc.SessionDescription
 import java.util.Locale
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 interface TimeTickerListener {
     fun onTimeTicketUpdate(seconds: Long)
@@ -77,6 +79,8 @@ class CiCareCallService:
     var callState = MutableStateFlow("connecting")
 
     private var isClosed = false
+
+    private var isRingbackPlaying = false
 
     private var wakeLock: PowerManager.WakeLock? = null
     private var wifiLock: WifiManager.WifiLock? = null
@@ -175,28 +179,58 @@ class CiCareCallService:
     private var ringbackPlayer: MediaPlayer? = null
 
     fun playRingback(context: Context) {
-        stopRingback() // pastikan tidak double
+        if (isRingbackPlaying) return
+        isRingbackPlaying = true
+
         ringbackJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive) {
-                ringbackPlayer = MediaPlayer.create(context, R.raw.tuut)
+            while (isActive && isRingbackPlaying) {
+                ringbackPlayer = MediaPlayer.create(context.applicationContext, R.raw.tuut)
                 ringbackPlayer?.start()
 
-                // Tunggu sampai audio selesai main
-                delay(ringbackPlayer?.duration?.toLong() ?: 1000L)
+                suspendCoroutine { continuation ->
+                    ringbackPlayer?.setOnCompletionListener {
+                        continuation.resume(Unit)
+                    }
+                }
 
-                // Hentikan player dan beri delay 3 detik sebelum ulang
-                ringbackPlayer?.release()
-                ringbackPlayer = null
-                delay(3000L) // delay antar "tuut"
+                cleanUpPlayer()
+
+                delay(3000L)
             }
         }
     }
 
+    private fun cleanUpPlayer() {
+        ringbackPlayer?.apply {
+            try {
+                stop()
+                release()
+            } catch (e: Exception) { }
+        }
+        ringbackPlayer = null
+    }
+
     fun stopRingback() {
+        if (!isRingbackPlaying && ringbackPlayer == null && ringbackJob == null) {
+            return
+        }
+
+        isRingbackPlaying = false
+
         ringbackJob?.cancel()
         ringbackJob = null
-        ringbackPlayer?.stop()
-        ringbackPlayer?.release()
+
+        ringbackPlayer?.let { player ->
+            try {
+                if (player.isPlaying) {
+                    player.stop()
+                }
+                player.setOnCompletionListener(null)
+                player.release()
+            } catch (e: Exception) {
+                Log.e("Ringback", "Error saat mematikan player: ${e.message}")
+            }
+        }
         ringbackPlayer = null
     }
 

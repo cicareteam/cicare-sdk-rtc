@@ -238,6 +238,17 @@ class WebRTCManager(
         }, constraints)
     }
 
+    fun setAudioOutputToNormal() {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+
+        if (audioManager == null) {
+            Log.e("AudioConfig", "AudioManager is null. Cannot configure audio output.")
+            return
+        }
+        audioManager.mode = AudioManager.MODE_NORMAL
+    }
+
+    @Suppress("DEPRECATION")
     fun setAudioOutputToSpeaker(enabled: Boolean) {
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
 
@@ -271,6 +282,7 @@ class WebRTCManager(
                 }
             } else {
                 audioManager.mode = AudioManager.MODE_IN_CALL
+                audioManager.isSpeakerphoneOn = enabled
             }
             Log.d("AudioConfig", "Audio output for communication updated. Speaker enabled: $enabled")
 
@@ -311,6 +323,7 @@ class WebRTCManager(
         mainHandler.post {
             performCleanup(disposeFactory = true)
         }
+        setAudioOutputToNormal()
     }
 
     /**

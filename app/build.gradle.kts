@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    //implementation("com.github.cicareteam:cicare-sdkcall:1.2.0-rc.9.4")
+    //implementation("com.github.cicareteam:cicare-sdk-rtc:1.2.1-rc.6")
     implementation(project(":sdkcall"))
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)

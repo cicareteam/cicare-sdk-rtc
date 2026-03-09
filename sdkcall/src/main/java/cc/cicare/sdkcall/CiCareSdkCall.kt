@@ -152,7 +152,7 @@ object CiCareSdkCall {
                      checkSum: String,
                      metaData: Map<String, String> = emptyMap(),
                      messageActionListener: MessageActionListener
-                     ) {
+    ) {
 
         val cipherText = metaData["alert_data"] ?: return
 
@@ -217,15 +217,15 @@ object CiCareSdkCall {
     }
 
     fun makeCall(
-                 activity: ComponentActivity,
-                 callerId: String,
-                 callerName: String? = "Caller",
-                 callerAvatar: String? = "",
-                 calleeId: String,
-                 calleeName: String? = "Callee",
-                 calleeAvatar: String = "",
-                 checkSum: String,
-                 metaData: Map<String, String> = emptyMap()) {
+        activity: ComponentActivity,
+        callerId: String,
+        callerName: String? = "Caller",
+        callerAvatar: String? = "",
+        calleeId: String,
+        calleeName: String? = "Callee",
+        calleeAvatar: String = "",
+        checkSum: String,
+        metaData: Map<String, String> = emptyMap()) {
         val ctx = contextRef?.get() ?: return
         CoroutineScope(Dispatchers.Main).launch {
             if (isForegroundMicPermissionGranted(activity)) {

@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity(), CallEventListener {
 
         CiCareSdkCall.setAPI(
             "https://sdk-gateway.c-icare.cc",
-            "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
+            "da57cceb27dda58f263c7b31d370e5350cf23afd5140f0fc9f2fe76713c1b562.3b84ad65bc5368c494d59c58fdca6a0971ad3d2453ad4f55f45ddd17bcdef0123456789abcdef")
 
         val uri = Uri.parse("android.resource://${this.packageName}/${cc.cicare.sdkcall.R.raw.miremix}")
 
@@ -444,7 +444,7 @@ fun makeSipCall( activity: ComponentActivity, currentUserId: Int, username: Stri
         callerId = currentUserId.toString(),
         callerName = username,
         callerAvatar = "https://avatar.iran.liara.run/public/boy",
-        destination = "98909",
+        destination = "1500738",
         destinationName = "Call Center",
         destinationAvatar = "https://avatar.iran.liara.run/public/boy",
         checkSum = "asdfasdf",

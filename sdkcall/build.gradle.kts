@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "cc.cicare.sdkcall"
-    version = "1.2.1-rc.6"
+    version = "1.2.1-rc.7"
     compileSdk = 35
 
     defaultConfig {
@@ -53,10 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.process)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.coil.compose)
     implementation(libs.material)
     implementation(libs.retrofit)
@@ -68,6 +64,10 @@ dependencies {
     implementation(libs.stream.webrtc.android)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,7 +79,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.cicareteam"
                 artifactId = "cicare-sdk-rtc"
-                version = "1.2.1-rc.6"
+                version = "1.2.1-rc.7"
                 from(components["release"])
             }
         }
