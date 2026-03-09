@@ -281,7 +281,7 @@ class WebRTCManager(
                     Log.d("AudioConfig", "Communication device cleared (speaker disabled).")
                 }
             } else {
-                audioManager.mode = AudioManager.MODE_IN_CALL
+                //audioManager.mode = AudioManager.MODE_IN_CALL
                 audioManager.isSpeakerphoneOn = enabled
             }
             Log.d("AudioConfig", "Audio output for communication updated. Speaker enabled: $enabled")
